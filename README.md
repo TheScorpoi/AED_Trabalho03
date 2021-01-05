@@ -3,7 +3,7 @@
 ## Decoding a non-instantaneous binary code
 .................
 .................
-
+ 
 ### Pré-requesitos 
 Para compilar os programas, é vital ter um Compilador de C instalado na máquina (p.e. gcc).
 O projeto foi desenvolvido com recurso ao IDE VSCode, para implementação do código C, e ao Matlab, para a realização de gráficos usados no relatório.
