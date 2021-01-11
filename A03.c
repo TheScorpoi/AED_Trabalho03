@@ -309,16 +309,53 @@ struct
 static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded_size) {
     _number_of_calls_++;  //increase by one, each time the function is called
 
-    if ((decoded_idx - good_decoded_size) > _max_extra_symbols_) { //update the max_extra_symbols, when the condition is true
+    /*isto ainda não é usado
+    {
+    if ((decoded_idx - good_decoded_size) > _max_extra_symbols_) {  //update the max_extra_symbols, when the condition is true
         _max_extra_symbols_ = (decoded_idx - good_decoded_size);
         //_number_of_solutions_++; //increve by one the numbers os solutions
     }
+    }*/
 
+    //* primeira implementação
+    // significa que chegamos ao fim, e a mensagem ja se encontra descodificada
+    if (_encoded_message_[encoded_idx] == NULL)  //se o ultimo indice do _encoded_message_ for igual a nulo, então chegamos ao fim
+    {
+        _number_of_solutions_++;
+        //print da original
+        //print da que me deu
+        //e confirmar se deu bem
 
+        return;
+    }
+
+    for (int i = 0; i < sizeof(_c_->data->codeword) / sizeof(_c_->data->codeword[0]); i++)  //? é até ao numero de codewords, acho que original_message_size nao é isso mas ja se ve
+    {
+        int j = 0;
+        while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {
+            
+
+            if (_c_->data[i].codeword[j++] == '\0') {
+                // encontramos um symbol valido, se  proximo for nulo, entao é pq  symbol é valido
+                _decoded_message_[decoded_idx] = i;
+                recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);
+                break;
+            }
+        }
+    }
+
+    for (int i = 0; i < _original_message_size_; i++) {
+        printf("%d-", _original_message_[i]);
+    }
+    printf("\n");
+    for (int i = 0; i < _original_message_size_; i++) {
+        printf("CODE WORD = %s ", _c_->data[i].codeword);
+    }
+    printf("\n");
 
     printf("ENCODED_MESSAGE: %s\n", _encoded_message_);
-    printf("CODEWORD: %s\n", _c_->data->codeword);
-    printf("ORIGINAL_SIZE: %d\n\n", _original_message_size_);
+    //printf("CODEWORD: %s\n", _c_->data->codeword);
+    printf("ORIGINAL_SIZE: %d\n", _original_message_size_);
 }
 
 //
