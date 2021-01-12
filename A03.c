@@ -307,7 +307,6 @@ struct
 //
 
 static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded_size) {
-
     _number_of_calls_++;  //increase by one, each time the function is called
 
     /*isto ainda não é usado
@@ -324,6 +323,22 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
     {
         _number_of_solutions_++;
 
+        printf("NUmmber of solutions: %d\n", _number_of_solutions_);
+
+        printf("Original Message: ");
+        for (size_t i = 0; i < _original_message_size_; i++) {
+            printf("%d", _original_message_[i]);
+        }
+        printf("\nEncoded Message: ");
+        printf("%s", _encoded_message_);
+        printf("\n\n");
+
+        for (int i = 0; i < _number_of_solutions_; i++) {
+            printf("CodeWord: %s  ", _c_->data[i].codeword);
+        }
+        printf("\n\n");
+
+        /*
         printf("ORIGINAL");
         for (int i = 0; i < _original_message_size_; i++) {
             printf("%d", _original_message_[i]);
@@ -333,14 +348,14 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
         for (int i = 0; i < sizeof(_c_->data->codeword) / sizeof(_c_->data->codeword[0]); i++) {
             printf("%d", _decoded_message_[i]);
         }
+        */
         return;
     }
 
-    for (int i = 0; i < sizeof(_c_->data->codeword) / sizeof(_c_->data->codeword[0]); i++)  //? é até ao numero de codewords, acho que original_message_size nao é isso mas ja se ve
-    {
+    for (int i = 0; i < sizeof(_c_->data->codeword) / sizeof(_c_->data->codeword[0]); i++) {
         int j = 0;
         while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {
-            if (_c_->data[i].codeword[j++] == '\0') {
+            if (_c_->data[i].codeword[j++] != '\0') {
                 // encontramos um symbol valido, se  proximo for nulo, entao é pq  symbol é valido
                 _decoded_message_[decoded_idx] = i;
                 printf("%d-", _decoded_message_[decoded_idx]);
