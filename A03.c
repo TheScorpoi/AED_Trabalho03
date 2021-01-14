@@ -335,7 +335,7 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
         }
         printf("\n");
         printf("DECODED  =    ");
-        for (int i = 0; i < sizeof(_decoded_message_) / sizeof(_decoded_message_[0]); i++) {
+        for (int i = 0; i < _original_message_size_; i++) {
             printf("%d", _decoded_message_[i]);
         }
         printf("\n");
@@ -343,12 +343,14 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
         return;
     }
 
-
     for (int i = 0; i < _c_->n_symbols; i++) {
         int j = 0;
+
         while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {
-            if (_c_->data[i].codeword[j++] != '\0') {
+            //printf("Simbolo i: %d  J = %d %c : %c\n", i, j, _c_->data[i].codeword[j], _encoded_message_[encoded_idx + j]);
+            if (_c_->data[i].codeword[++j] == '\0') {
                 _decoded_message_[decoded_idx] = i;
+                //printf("Encontrei o simbolo i %d\n", i);
                 recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);
                 break;
             }
