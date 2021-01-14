@@ -315,7 +315,7 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
         //_number_of_solutions_++; //increve by one the numbers os solutions
     }*/
 
-    //! Para ver o encode de cada simbolo
+    //! Para ver o encode de cada simbolo --> Tabela 
     /*
     for (int i = 0; i < _c_->n_symbols ; i++)
     {
@@ -326,7 +326,7 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
     //* Terminal condition, message is already decoded
     if (_encoded_message_[encoded_idx] == '\0')  //if the last index of _encoded_message is equal to NULL, the message is decoded
     {
-        _number_of_solutions_++;  //!increse by one, but i dont know what this really do, it is supose to be here?
+        _number_of_solutions_++;  //increase by one,
 
         //the folowing prints, are just to confirm if the decoded was successefully
         printf("ORIGINAL  =   ");
@@ -334,7 +334,7 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
             printf("%d", _original_message_[i]);
         }
         printf("\n");
-        printf("DECODED  =    ");
+        printf("DECODED   =   ");
         for (int i = 0; i < _original_message_size_; i++) {
             printf("%d", _decoded_message_[i]);
         }
@@ -343,15 +343,12 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
         return;
     }
 
-    for (int i = 0; i < _c_->n_symbols; i++) {
+    for (int i = 0; i < _c_->n_symbols; i++) {  //for cycle to go through symbols
         int j = 0;
-
-        while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {
-            //printf("Simbolo i: %d  J = %d %c : %c\n", i, j, _c_->data[i].codeword[j], _encoded_message_[encoded_idx + j]);
-            if (_c_->data[i].codeword[++j] == '\0') {
-                _decoded_message_[decoded_idx] = i;
-                //printf("Encontrei o simbolo i %d\n", i);
-                recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);
+        while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {  //!while the codeword[j] is equal to the 
+            if (_c_->data[i].codeword[++j] == '\0') { //when the codeword finish, this is when codeword[j + 1] == '\0')
+                _decoded_message_[decoded_idx] = i;  // decode array is incremented with the i, in decoded index
+                recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size); //recall the recursive function, with the updated arguments 
                 break;
             }
         }
