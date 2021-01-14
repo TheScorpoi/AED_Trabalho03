@@ -310,55 +310,45 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
     _number_of_calls_++;  //increase by one, each time the function is called
 
     /*isto ainda não é usado
-    {
     if ((decoded_idx - good_decoded_size) > _max_extra_symbols_) {  //update the max_extra_symbols, when the condition is true
         _max_extra_symbols_ = (decoded_idx - good_decoded_size);
         //_number_of_solutions_++; //increve by one the numbers os solutions
-    }
     }*/
 
-    //* primeira implementação
-    // significa que chegamos ao fim, e a mensagem ja se encontra descodificada
-    if (_encoded_message_[encoded_idx] == '\0')  //se o ultimo indice do _encoded_message_ for igual a nulo, então chegamos ao fim
+    //! Para ver o encode de cada simbolo
+    /*
+    for (int i = 0; i < _c_->n_symbols ; i++)
     {
-        _number_of_solutions_++;
+        printf("Code %d : %s\n", i, _c_->data[i].codeword);
+    }
+    */
 
-        printf("NUmmber of solutions: %d\n", _number_of_solutions_);
+    //* Terminal condition, message is already decoded
+    if (_encoded_message_[encoded_idx] == '\0')  //if the last index of _encoded_message is equal to NULL, the message is decoded
+    {
+        _number_of_solutions_++;  //!increse by one, but i dont know what this really do, it is supose to be here?
 
-        printf("Original Message: ");
-        for (size_t i = 0; i < _original_message_size_; i++) {
-            printf("%d", _original_message_[i]);
-        }
-        printf("\nEncoded Message: ");
-        printf("%s", _encoded_message_);
-        printf("\n\n");
-
-        for (int i = 0; i < _number_of_solutions_; i++) {
-            printf("CodeWord: %s  ", _c_->data[i].codeword);
-        }
-        printf("\n\n");
-
-        /*
-        printf("ORIGINAL");
+        //the folowing prints, are just to confirm if the decoded was successefully
+        printf("ORIGINAL  =   ");
         for (int i = 0; i < _original_message_size_; i++) {
             printf("%d", _original_message_[i]);
         }
-
-        printf("DECODED");
-        for (int i = 0; i < sizeof(_c_->data->codeword) / sizeof(_c_->data->codeword[0]); i++) {
+        printf("\n");
+        printf("DECODED  =    ");
+        for (int i = 0; i < sizeof(_decoded_message_) / sizeof(_decoded_message_[0]); i++) {
             printf("%d", _decoded_message_[i]);
         }
-        */
+        printf("\n");
+
         return;
     }
 
-    for (int i = 0; i < sizeof(_c_->data->codeword) / sizeof(_c_->data->codeword[0]); i++) {
+
+    for (int i = 0; i < _c_->n_symbols; i++) {
         int j = 0;
         while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {
             if (_c_->data[i].codeword[j++] != '\0') {
-                // encontramos um symbol valido, se  proximo for nulo, entao é pq  symbol é valido
                 _decoded_message_[decoded_idx] = i;
-                printf("%d-", _decoded_message_[decoded_idx]);
                 recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);
                 break;
             }
