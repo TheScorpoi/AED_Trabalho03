@@ -309,15 +309,15 @@ struct
 static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded_size) {
     _number_of_calls_++;  //increase by one, each time the function is called
 
-    /*
     if ((decoded_idx - good_decoded_size) > _max_extra_symbols_) {  //update the max_extra_symbols, when the condition is true
         _max_extra_symbols_ = (decoded_idx - good_decoded_size);
-    }*/
+    }
+
     /* Para ver o encode de cada simbolo --> Tabela 
     for (int i = 0; i < _c_->n_symbols ; i++) {
         printf("Code %d : %s\n", i, _c_->data[i].codeword);
-    }
-    */
+    }*/
+
     //* Terminal condition, message is already decoded
     if (_encoded_message_[encoded_idx] == '\0')  //if the last index of _encoded_message is equal to NULL, the message is decoded
     {
@@ -328,20 +328,21 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
         printf("\nDECODED   =   ");for (int i = 0; i < _original_message_size_; i++)printf("%d", _decoded_message_[i]);printf("\n");
         */
 
-       //! just for debugging, not really important
+        //! just for debugging, not really important
         printf("Decoded: %d\n", decoded_idx);
         printf("Good Decoded: %d\n", good_decoded_size);
 
         return;
     }
 
+    good_decoded_size++;                                                                 //good_decoded increse by one
+    
     for (int i = 0; i < _c_->n_symbols; i++) {  //for cycle to go through symbols
         int j = 0;
-        while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {  //!while the codeword[j] is equal to the
-            if (_c_->data[i].codeword[++j] == '\0') { //when the codeword finish, this is when codeword[j + 1] == '\0')
-                good_decoded_size++; //idk where this is supose to be
-                _decoded_message_[decoded_idx] = i;  // decode array is incremented with the i, in decoded index
-                recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size); //recall the recursive function, with the updated arguments 
+        while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {         //!while the codeword[j] is equal to the
+            if (_c_->data[i].codeword[++j] == '\0') {                                    //when the codeword finish, this is when codeword[j + 1] == '\0')
+                _decoded_message_[decoded_idx] = i;                                      // decode array is incremented with the i, in decoded index
+                recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);  //recall the recursive function, with the updated arguments
                 break;
             }
         }
@@ -497,6 +498,8 @@ int main(int argc, char **argv) {
         }
         t_avg /= (double)(2 * N_VALID + 1);
         u_avg /= (double)(2 * N_VALID + 1);
+        //! WHY THE HELL THIS MOTHERFUCKER DONT APPEAR COMPLETELY
+        printf("%4s  %8.3s %8.3s %8.3s %8.3s  %4s %6.1s %4s %4s\n", "n_symbols", "t_min", "t_avg", "t_data", "t_max", "u_min", "u_avg", "u_data", "u_max");
         printf("%4d  %8.3f %8.3f %8.3f %8.3f  %4d %6.1f %4d %4d\n", n_symbols, t_min, t_avg, t_data[N_OUTLIERS + N_VALID], t_max, u_min, u_avg, u_data[N_OUTLIERS + N_VALID], u_max);
         return 0;
     }
