@@ -1,8 +1,9 @@
 # AED_Trabalho03
 
 ## Decoding a non-instantaneous binary code
-.................
-.................
+
+
+
  
 ### Pré-requesitos 
 Para compilar os programas, é vital ter um Compilador de C instalado na máquina (p.e. gcc).
