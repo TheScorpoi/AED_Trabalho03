@@ -1,25 +1,29 @@
 # AED_Trabalho03
 
 ## Decoding a non-instantaneous binary code
-.................
-.................
+
+
+
  
 ### Pré-requesitos 
 Para compilar os programas, é vital ter um Compilador de C instalado na máquina (p.e. gcc).
 O projeto foi desenvolvido com recurso ao IDE VSCode, para implementação do código C, e ao Matlab, para a realização de gráficos usados no relatório.
 
 ### Compilar
-Para compilar o programa, é necessário executar o comando na pasta onde o ficheiro **job_selection.c** se encontra da seguinte maneira:
-**Os argumentos passados no segundo comando são meramente ilustrativos.**
-
+Para compilar o programa, é necessário utilizamos o *makefile*, da seguinte maneira:
 ```
-......
-......
+make A03
 ```
-Aqui falar do do_all.bash
+Aqui executar, há as seguintes possibilidades:
 ```
-.....
-.....
+usage: ./A03 -s n_symbols seed                     # show the code words of random code
+       ./A03 -t [n_symbols [message_size [seed]]]  # encode and decode a message
+       ./A03 -x n_symbols                          # try the first 201 seeds
+```
+Para tirar mais partido de todo o poder do processsador usamos o seguinte *script*, *do_all.bash*:
+```
+chmod u+x do_all.bash      #para atribuir permissões
+./do_all.bash              #para executar o script
 ```
 
 ### Relatório
