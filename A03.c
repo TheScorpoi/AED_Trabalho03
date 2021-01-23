@@ -12,7 +12,7 @@
 //
 
 #ifndef MAX_N_SYMBOLS
-#define MAX_N_SYMBOLS 100  // maximum number of alphabet symbols in a code
+#define MAX_N_SYMBOLS 500  // maximum number of alphabet symbols in a code
 #endif
 #ifndef MAX_CODEWORD_SIZE
 #define MAX_CODEWORD_SIZE 23  // maximum number of bits of a codeword
@@ -314,23 +314,16 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
     }
 
     /* Para ver o encode de cada simbolo --> Tabela 
-    for (int i = 0; i < _c_->n_symbols ; i++) {
-        printf("Code %d : %s\n", i, _c_->data[i].codeword);
-    }*/
+    for (int i = 0; i < _c_->n_symbols ; i++) {printf("Code %d : %s\n", i, _c_->data[i].codeword);}*/
 
-    //* Terminal condition, message is already decoded
+    //* Terminal condition, it means that message is already decoded
     if (_encoded_message_[encoded_idx] == '\0')  //if the last index of _encoded_message is equal to NULL, the message is decoded
     {
-        _number_of_solutions_++;  //increase by one,
+        _number_of_solutions_++;  //increase by one, and it should be one 
 
         /* the folowing prints, are just to confirm if the decoded was successefully
         printf("ORIGINAL  =   ");for (int i = 0; i < _original_message_size_; i++) printf("%d", _original_message_[i]);
-        printf("\nDECODED   =   ");for (int i = 0; i < _original_message_size_; i++)printf("%d", _decoded_message_[i]);printf("\n");
-        */
-
-        //! just for debugging, not really important
-        printf("Decoded: %d\n", decoded_idx);
-        printf("Good Decoded: %d\n", good_decoded_size);
+        printf("\nDECODED   =   ");for (int i = 0; i < _original_message_size_; i++)printf("%d", _decoded_message_[i]);printf("\n"); */
 
         return;
     }
@@ -499,8 +492,8 @@ int main(int argc, char **argv) {
         t_avg /= (double)(2 * N_VALID + 1);
         u_avg /= (double)(2 * N_VALID + 1);
         //! WHY THE HELL THIS MOTHERFUCKER DONT APPEAR COMPLETELY
-        printf("%4s  %8.3s %8.3s %8.3s %8.3s  %4s %6.1s %4s %4s\n", "n_symbols", "t_min", "t_avg", "t_data", "t_max", "u_min", "u_avg", "u_data", "u_max");
-        printf("%4d  %8.3f %8.3f %8.3f %8.3f  %4d %6.1f %4d %4d\n", n_symbols, t_min, t_avg, t_data[N_OUTLIERS + N_VALID], t_max, u_min, u_avg, u_data[N_OUTLIERS + N_VALID], u_max);
+        printf("n_symbols  t_min  t_avg  t_data  t_max  u_min u_avg u_data u_max\n");
+        printf("%4d    %8.3f %6.3f %7.3f %6.3f  %3d %6.1f %4d %6d\n", n_symbols, t_min, t_avg, t_data[N_OUTLIERS + N_VALID], t_max, u_min, u_avg, u_data[N_OUTLIERS + N_VALID], u_max);
         return 0;
     }
     //
