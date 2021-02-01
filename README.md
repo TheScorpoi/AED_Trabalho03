@@ -1,12 +1,10 @@
 # AED_Trabalho03
 
 ## Decoding a non-instantaneous binary code
-
-
-
+A binary  code  assigns  to  each  symbol  of  an  alphabet  a  specific  sequence  of  bits  (a  binary  codeword). The code is uniquely decodable, but it is not instantaneous. What we have to do is implement a recursive function *recursive_decoder*, that given a binary code, it can dedode that and give us the original message.
  
 ### Pré-requesitos 
-Para compilar os programas, é vital ter um Compilador de C instalado na máquina (p.e. gcc).
+Para compilar os programas, é vital ter um compilador de C instalado na máquina (p.e. gcc).
 O projeto foi desenvolvido com recurso ao IDE VSCode, para implementação do código C, e ao Matlab, para a realização de gráficos usados no relatório.
 
 ### Compilar
