@@ -313,33 +313,24 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
         _max_extra_symbols_ = (decoded_idx - good_decoded_size);
     }
 
-    /* Para ver o encode de cada simbolo --> Tabela 
-    for (int i = 0; i < _c_->n_symbols ; i++) {printf("Code %d : %s\n", i, _c_->data[i].codeword);}*/
-
     //* Terminal condition, it means that message is already decoded
-    if (_encoded_message_[encoded_idx] == '\0')  //if the last index of _encoded_message is equal to NULL, the message is decoded
-    {
+    if (_encoded_message_[encoded_idx] == '\0') { //if the last index of _encoded_message is equal to NULL, the message is decoded
         _number_of_solutions_++;  //increase by one, and it should be one
-
-        //*the folowing prints, are just to confirm if the decoded was successefully
-        /*printf("ORIGINAL  =   ");for (int i = 0; i < _original_message_size_; i++) printf("%d", _original_message_[i]);
-        printf("\nDECODED   =   ");for (int i = 0; i < _original_message_size_; i++)printf("%d", _decoded_message_[i]);printf("\n");*/
         return;
     }
-
-
-    //! _good_decoded_size is not working, i think we need to do some cheat on that, something like
-    //! compare the _orignal_message_ with the decoded_message, and so that, s in a determine index
-    //! they are equal, the _good_decoded_size increment by one, is now it mantain the value. But
-    //! in this moment I have tested a lot os implementations and can't reach somethins with worth
 
     for (int i = 0; i < _c_->n_symbols; i++) {  //for cycle to go through
         int j = 0;
         while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {  //!while the codeword[j] is equal to the
-
-            if (_c_->data[i].codeword[++j] == '\0') {                                    //when the codeword finish, this is when codeword[j + 1] == '\0')
-                _decoded_message_[decoded_idx] = i;                                      // decode array is incremented with the i, in decoded index
-                recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);  //recall the recursive function, with the updated arguments
+            if (_c_->data[i].codeword[++j] == '\0') {                             //when the codeword finish, this is when codeword[j + 1] == '\0')
+                _decoded_message_[decoded_idx] = i;                               // decode array is incremented with the i, in decoded index
+                //* confirm if the symbol decoded is equal to the symbol original, and if the good_decoded_size is equal to decoded_idx, both may be equal to be right
+                if (_original_message_[decoded_idx] == _decoded_message_[decoded_idx] && (good_decoded_size) == decoded_idx) {
+                    printf("%d", _decoded_message_[decoded_idx]);
+                    recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size + 1);
+                } else {
+                    recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);    
+                }
                 break;
             }
         }
