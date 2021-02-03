@@ -318,7 +318,7 @@ struct
 // If you get a segmentation fault in our program you may need to increase the stack size (under GNU/linux, you can do it using the command "ulimit -s 16384")
 //
 
-static void print_dedode_real_time(int decoded_idx) {
+static void print_decode_real_time(int decoded_idx) {
     usleep(100000);
     printf("\r");
     for (int k = 0; k <= decoded_idx; k++) {
@@ -349,12 +349,12 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
                 //* confirm if the symbol decoded is equal to the symbol original, and if the good_decoded_size is equal to decoded_idx, both may be equal to be right
                 if (_original_message_[decoded_idx] == _decoded_message_[decoded_idx] && (good_decoded_size) == decoded_idx) {
                     if (N == 1) {
-                        print_dedode_real_time(decoded_idx);
+                        print_decode_real_time(decoded_idx);
                     }
                     recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size + 1);
                 } else {
                     if (N == 1) {
-                        print_dedode_real_time(decoded_idx);
+                        print_decode_real_time(decoded_idx);
                     }
                     recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);
                 }
