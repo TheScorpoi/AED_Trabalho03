@@ -1,7 +1,7 @@
 clear all;
 close all;
 
-file = load("output100.txt");
+file = load("output.txt");
 
 n = file(:, 1);
 
@@ -50,7 +50,7 @@ stem3(n, time, lookaheadMAX, "or");
 title 'Tempos de execução vs Lookaheads'
 xlabel 'Número de Símbolos'
 ylabel 'Tempo (s)'
-xlabel 'Lookahead'
+zlabel 'Lookahead'
 
 
 
