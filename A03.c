@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "elapsed_time.h"
 
 //
 // Compile time parameters
@@ -282,6 +283,7 @@ struct
     long number_of_calls;          // the number of recursive function calls
     long number_of_solutions;      // the number of solutions (at the end, is all is well, must be equal to 1)
     int max_extra_symbols;         // the largest difference between the partially decoded message and the good part of the partially decoded message)
+    double cpu_time;               // the variable to measure the time of each n
 } decoder_global_data;
 
 #define _c_ decoder_global_data.c
@@ -294,6 +296,7 @@ struct
 #define _number_of_calls_ decoder_global_data.number_of_calls
 #define _number_of_solutions_ decoder_global_data.number_of_solutions
 #define _max_extra_symbols_ decoder_global_data.max_extra_symbols
+#define _cpu_time_ decoder_global_data.cpu_time
 
 //
 // Recursive decoder
@@ -314,8 +317,8 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
     }
 
     //* Terminal condition, it means that message is already decoded
-    if (_encoded_message_[encoded_idx] == '\0') { //if the last index of _encoded_message is equal to NULL, the message is decoded
-        _number_of_solutions_++;  //increase by one, and it should be one
+    if (_encoded_message_[encoded_idx] == '\0') {  //if the last index of _encoded_message is equal to NULL, the message is decoded
+        _number_of_solutions_++;                   //increase by one, and it should be one
         return;
     }
 
@@ -326,10 +329,12 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
                 _decoded_message_[decoded_idx] = i;                               // decode array is incremented with the i, in decoded index
                 //* confirm if the symbol decoded is equal to the symbol original, and if the good_decoded_size is equal to decoded_idx, both may be equal to be right
                 if (_original_message_[decoded_idx] == _decoded_message_[decoded_idx] && (good_decoded_size) == decoded_idx) {
-                    printf("%d", _decoded_message_[decoded_idx]);
+                    //for (int k = 0; k < 5; k++) {
+                    //    printf("%d", _decoded_message_[k]);
+                    //}
                     recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size + 1);
                 } else {
-                    recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);    
+                    recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);
                 }
                 break;
             }
@@ -364,7 +369,11 @@ void try_it(code_t *c, int message_size, int show_results) {
     }
     random_message(_c_, _original_message_size_, _original_message_);
     encode_message(_c_, _original_message_size_, _original_message_, _max_encoded_message_size_, _encoded_message_);
+
+    //decoder_global_data.cpu_time = cpu_time();
     recursive_decoder(0, 0, 0);
+    //decoder_global_data.cpu_time = cpu_time() - decoder_global_data.cpu_time;
+
     if (_number_of_solutions_ != 1L) {
         fprintf(stderr, "number of solutions: %ld\n", _number_of_solutions_);
         fprintf(stderr, "number of function calls: %ld (%.3f per message symbol)\n", _number_of_calls_, (double)_number_of_calls_ / (double)_original_message_size_);
@@ -457,6 +466,7 @@ int main(int argc, char **argv) {
         }
         t_min = t_max = 0.0;
         u_min = u_max = 0;
+        _cpu_time_ = cpu_time();
         for (seed = 1; seed <= N_MEASUREMENTS; seed++) {
             srandom(seed);
             c = new_code(n_symbols);
@@ -486,7 +496,9 @@ int main(int argc, char **argv) {
         }
         t_avg /= (double)(2 * N_VALID + 1);
         u_avg /= (double)(2 * N_VALID + 1);
-        printf("%4d %8.3f %6.3f %7.3f %6.3f  %3d %6.1f %4d %6d\n", n_symbols, t_min, t_avg, t_data[N_OUTLIERS + N_VALID], t_max, u_min, u_avg, u_data[N_OUTLIERS + N_VALID], u_max);
+        _cpu_time_ = cpu_time() - _cpu_time_;
+
+        printf("%4d %8.3f %6.3f %7.3f %6.3f  %3d %6.1f %4d %6d %6.2f\n", n_symbols, t_min, t_avg, t_data[N_OUTLIERS + N_VALID], t_max, u_min, u_avg, u_data[N_OUTLIERS + N_VALID], u_max, _cpu_time_);
         return 0;
     }
     //

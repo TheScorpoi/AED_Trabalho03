@@ -1,7 +1,7 @@
 #! /bin/bash
 
 
-for n in {500..3}; do
+for n in {30..3}; do
   if [ -e stop_request ]; then
     exit 0
   fi
