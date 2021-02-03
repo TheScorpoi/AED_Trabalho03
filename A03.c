@@ -6,6 +6,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 #include "elapsed_time.h"
 
 //
@@ -29,6 +32,10 @@
 #define N_VALID 80  // use this number of measurements on each side of the median
 #endif
 #define N_MEASUREMENTS (2 * N_OUTLIERS + 2 * N_VALID + 1)  // total number of measurements
+
+#ifndef N
+#define N 0
+#endif
 
 //
 // Random number generator interface
@@ -273,17 +280,18 @@ void encode_message(code_t *c, int message_size, int message[message_size], int 
 
 struct
 {
-    code_t *c;                     // the code being used
-    int *original_message;         // the original message
-    int original_message_size;     // the original message length
-    int max_encoded_message_size;  // the largest possible encoded message size
-    char *encoded_message;         // the encoded message
-    int max_decoded_message_size;  // the largest possible decoded message length
-    int *decoded_message;          // the decoded message (should be equal to the original message)
-    long number_of_calls;          // the number of recursive function calls
-    long number_of_solutions;      // the number of solutions (at the end, is all is well, must be equal to 1)
-    int max_extra_symbols;         // the largest difference between the partially decoded message and the good part of the partially decoded message)
-    double cpu_time;               // the variable to measure the time of each n
+    code_t *c;                                // the code being used
+    int *original_message;                    // the original message
+    int original_message_size;                // the original message length
+    int max_encoded_message_size;             // the largest possible encoded message size
+    char *encoded_message;                    // the encoded message
+    int max_decoded_message_size;             // the largest possible decoded message length
+    int *decoded_message;                     // the decoded message (should be equal to the original message)
+    long number_of_calls;                     // the number of recursive function calls
+    long number_of_solutions;                 // the number of solutions (at the end, is all is well, must be equal to 1)
+    int max_extra_symbols;                    // the largest difference between the partially decoded message and the good part of the partially decoded message)
+    double cpu_time;                          // the variable to measure the time of each n
+    char tmp_decoded_message[MAX_N_SYMBOLS];  // the temporary decoded array, it'll be used to decoded in real-time
 } decoder_global_data;
 
 #define _c_ decoder_global_data.c
@@ -297,6 +305,7 @@ struct
 #define _number_of_solutions_ decoder_global_data.number_of_solutions
 #define _max_extra_symbols_ decoder_global_data.max_extra_symbols
 #define _cpu_time_ decoder_global_data.cpu_time
+#define _tmp_decoded_message_ decoder_global_data.tmp_decoded_message
 
 //
 // Recursive decoder
@@ -309,6 +318,15 @@ struct
 // If you get a segmentation fault in our program you may need to increase the stack size (under GNU/linux, you can do it using the command "ulimit -s 16384")
 //
 
+static void print_dedode_real_time(int decoded_idx) {
+    usleep(100000);
+    printf("\r");
+    for (int k = 0; k <= decoded_idx; k++) {
+        printf("%d", _decoded_message_[k]);
+    }
+    fflush(stdout);
+}
+
 static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded_size) {
     _number_of_calls_++;  //increase by one, each time the function is called
 
@@ -319,21 +337,25 @@ static void recursive_decoder(int encoded_idx, int decoded_idx, int good_decoded
     //* Terminal condition, it means that message is already decoded
     if (_encoded_message_[encoded_idx] == '\0') {  //if the last index of _encoded_message is equal to NULL, the message is decoded
         _number_of_solutions_++;                   //increase by one, and it should be one
+
         return;
     }
 
     for (int i = 0; i < _c_->n_symbols; i++) {  //for cycle to go through
         int j = 0;
-        while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {  //!while the codeword[j] is equal to the
+        while (_c_->data[i].codeword[j] == _encoded_message_[encoded_idx + j]) {  //while the codeword[j] is equal to the bit [encoded_idx + j] of _encoded_message_
             if (_c_->data[i].codeword[++j] == '\0') {                             //when the codeword finish, this is when codeword[j + 1] == '\0')
                 _decoded_message_[decoded_idx] = i;                               // decode array is incremented with the i, in decoded index
                 //* confirm if the symbol decoded is equal to the symbol original, and if the good_decoded_size is equal to decoded_idx, both may be equal to be right
                 if (_original_message_[decoded_idx] == _decoded_message_[decoded_idx] && (good_decoded_size) == decoded_idx) {
-                    //for (int k = 0; k < 5; k++) {
-                    //    printf("%d", _decoded_message_[k]);
-                    //}
+                    if (N == 1) {
+                        print_dedode_real_time(decoded_idx);
+                    }
                     recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size + 1);
                 } else {
+                    if (N == 1) {
+                        print_dedode_real_time(decoded_idx);
+                    }
                     recursive_decoder(encoded_idx + j, decoded_idx + 1, good_decoded_size);
                 }
                 break;
@@ -383,6 +405,7 @@ void try_it(code_t *c, int message_size, int show_results) {
         //
         // print some data about this particular case (average number of calls per symbol, worst probe lookahead)
         //
+        if (N == 1){printf("\n");}
         printf("%4s %13.3s %15s\n", "Symbols", "Avg Calls", "Max extra symbols");
         printf("%4d %13.3f %15d\n", _c_->n_symbols, (double)_number_of_calls_ / (double)_original_message_size_, _max_extra_symbols_);
         fflush(stdout);
