@@ -291,7 +291,6 @@ struct
     long number_of_solutions;                 // the number of solutions (at the end, is all is well, must be equal to 1)
     int max_extra_symbols;                    // the largest difference between the partially decoded message and the good part of the partially decoded message)
     double cpu_time;                          // the variable to measure the time of each n
-    char tmp_decoded_message[MAX_N_SYMBOLS];  // the temporary decoded array, it'll be used to decoded in real-time
 } decoder_global_data;
 
 #define _c_ decoder_global_data.c
@@ -305,7 +304,6 @@ struct
 #define _number_of_solutions_ decoder_global_data.number_of_solutions
 #define _max_extra_symbols_ decoder_global_data.max_extra_symbols
 #define _cpu_time_ decoder_global_data.cpu_time
-#define _tmp_decoded_message_ decoder_global_data.tmp_decoded_message
 
 //
 // Recursive decoder
