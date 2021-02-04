@@ -10,7 +10,8 @@ O projeto foi desenvolvido com recurso ao IDE VSCode, para implementação do c�
 ### Compilar
 Para compilar o programa, é necessário utilizamos o *makefile*, da seguinte maneira:
 ```
-make A03
+make A03          #compile without decode in real-time
+make A03_RT       #compile with decode in real-time
 ```
 Aqui executar, há as seguintes possibilidades:
 ```
