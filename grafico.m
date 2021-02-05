@@ -16,11 +16,20 @@ callsSymbolMIN = file(:, 2);
 callsSymbolAVG = file(:, 3);
 
 
+
+
 figure(1)
+x = (1:length(n))';
+Rtime = fitlm(x, time);
+pptime = polyfit(x, time, 1);
+plot(x, polyval(pptime, x), '-k', "lineWidth", 2);
+hold on;
 plot(n, time);
-title 'Tempos de ExecuÃ§Ã£o'
-xlabel 'NÃºmero de Simbolos'
+hold off;
+title 'Tempos de Execução com regressão linear'
+xlabel 'Número de Símbolos'
 ylabel 'Tempo (s)'
+legend ('R² = 0.994')
 
 
 figure(2)
@@ -51,6 +60,11 @@ title 'Tempos de execuÃ§Ã£o vs Lookaheads'
 xlabel 'NÃºmero de SÃ­mbolos'
 ylabel 'Tempo (s)'
 zlabel 'Lookahead'
+
+
+
+
+
 
 
 
