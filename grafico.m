@@ -15,9 +15,6 @@ callsSymbolMAX = file(:, 5);
 callsSymbolMIN = file(:, 2);
 callsSymbolAVG = file(:, 3);
 
-
-
-
 figure(1)
 x = (1:length(n))';
 Rtime = fitlm(x, time);
@@ -26,11 +23,10 @@ plot(x, polyval(pptime, x), '-k', "lineWidth", 2);
 hold on;
 plot(n, time);
 hold off;
-title 'Tempos de Execu��o com regress�o linear'
-xlabel 'N�mero de S�mbolos'
+title 'Tempos de Execução com regressão linear'
+xlabel 'Número de Símbolos'
 ylabel 'Tempo (s)'
-legend ('R� = 0.994')
-
+legend ('R² = 0.994')
 
 figure(2)
 plot(n, lookaheadMAX, "o");
@@ -39,25 +35,24 @@ plot(n, lookaheadMIN, "v");
 plot(n, lookaheadAVG, "*");
 hold off;
 title 'Lookahead '
-xlabel 'Número de Simbolos'
+xlabel 'NÃºmero de Simbolos'
 ylabel 'Lookahead max'
-legend ("Lookahead Máximo","Lookahead Mínimo","Lookahead Média");
+legend ("Lookahead MÃ¡ximo","Lookahead MÃ­nimo","Lookahead MÃ©dia");
 
 figure(3)
 plot(n, callsSymbolMAX, "or");
 hold on;
 plot(n, callsSymbolMIN, "*b");
 plot(n, callsSymbolAVG, "vg");
-title 'Número de Chamadas por Símbolo'
-xlabel 'Número de Símbolos'
-ylabel 'Número de Chamadas'
-legend ("Número Máximo de Chamadas","Número Mínimo de Chamadas","Média do Número de Chamadas");
-
+title 'NÃºmero de Chamadas por SÃ­mbolo'
+xlabel 'NÃºmero de SÃ­mbolos'
+ylabel 'NÃºmero de Chamadas'
+legend ("NÃºmero MÃ¡ximo de Chamadas","NÃºmero MÃ­nimo de Chamadas","MÃ©dia do NÃºmero de Chamadas");
 
 figure(4)
 stem3(n, time, lookaheadMAX, "or");
-title 'Tempos de execução vs Lookaheads'
-xlabel 'Número de Símbolos'
+title 'Tempos de execuÃ§Ã£o vs Lookaheads'
+xlabel 'NÃºmero de SÃ­mbolos'
 ylabel 'Tempo (s)'
 zlabel 'Lookahead'
 
