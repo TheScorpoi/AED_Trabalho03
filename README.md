@@ -10,8 +10,8 @@ O projeto foi desenvolvido com recurso ao IDE VSCode, para implementação do c�
 ### Compilar
 Para compilar o programa, é necessário utilizamos o *makefile*, da seguinte maneira:
 ```
-make A03          #compile without decode in real-time
-make A03_RT       #compile with decode in real-time
+make A03                                           #compile without decode in real-time
+make A03_RT                                        #compile with decode in real-time
 ```
 Aqui executar, há as seguintes possibilidades:
 ```
@@ -21,8 +21,8 @@ usage: ./A03 -s n_symbols seed                     # show the code words of rand
 ```
 Para tirar mais partido de todo o poder do processsador usamos o seguinte *script*, *do_all.bash*:
 ```
-chmod u+x do_all.bash      #para atribuir permissões
-./do_all.bash              #para executar o script
+chmod u+x do_all.bash                              #para atribuir permissões
+./do_all.bash                                      #para executar o script
 ```
 
 ### Relatório
